@@ -9,8 +9,8 @@ import baiduCode from './config/baiduCode' // 百度统计hm码
 import htmlModules from './config/htmlModules' // 自定义插入的html块
 
 export default defineConfig4CustomTheme<VdoingThemeConfig>({
-  theme: 'vdoing', // 使用npm主题包
-  // theme: resolve(__dirname, '../../vdoing'), // 使用本地主题包
+  // theme: 'vdoing', // 使用npm主题包
+  theme: resolve(__dirname, '../../vdoing'), // 使用本地主题包
 
   locales: {
     '/': {
@@ -162,9 +162,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
 
     // 博主信息 (显示在首页侧边栏)
     blogger: {
-      avatar: 'https://cdn.jsdelivr.net/gh/xugaoyi/image_store/blog/20200103123203.jpg',
-      name: 'Evan Xu',
-      slogan: '前端界的小学生',
+      // avatar: 'https://cdn.jsdelivr.net/gh/xugaoyi/image_store/blog/20200103123203.jpg',
+      avatar: '/img/web.png',
+      name: 'Liu Yuan',
+      slogan: '热爱生活！',
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.xugaoyi.com/pages/a20ce8/#social)
