@@ -1,0 +1,97 @@
+﻿# 函数语法
+函数功能: 缩小或者放大函数至某一个大小
+```python
+cv2.resize(src, dsize[, dst[, fx[, fy[, interpolation]]]])
+```
+## 参数解释
+参数     | 解释
+-------- | -----
+src  | 输入图片
+dsize | 输出图片尺寸（元组）
+fx,fy  | 沿x轴，y轴的缩放系数
+interpolation  | 插值方法
+
+### InputArray src
+输入原图像，即待改变大小的图像；
+### dsize
+输出图像的大小。
+如果这个参数不为0，那么就代表将原图像缩放到这个Size(width，height)指定的大小；如果这个参数为0，那么原图像缩放之后的大小就要通过下面的公式来计算：
+dsize = Size(round(fxsrc.cols), round(fysrc.rows))
+其中，fx和fy就是下面要说的两个参数，是图像width方向和height方向的缩放比例。
+### fx,fy
+fx：width方向的缩放比例，如果它是0，那么它就会按照(double)dsize.width/src.cols来计算；
+fy：height方向的缩放比例，如果它是0，那么它就会按照(double)dsize.height/src.rows来计算；
+
+>Note:
+>- dsize和fx/fy不能同时为0，
+要么你就指定好dsize的值，让fx和fy空置直接使用默认值，就像resize(img, imgDst, Size(30,30));
+要么你就让dsize为0，指定好fx和fy的值，比如fx=fy=0.5，那么就相当于把原图两个方向缩小一倍！
+>- 正常情况下，在使用之前dst图像的大小和类型都是不知道的，类型从src图像继承而来，大小也是从原图像根据参数计算出来。但是如果你事先已经指定好dst图像的大小，那么你可以通过下面这种方式来调用函数：
+resize(src, dst, dst.size(), 0, 0, interpolation);
+
+### interpolation选项
+项目     | Value
+-------- | -----
+INTER_NEAREST  | 最近邻插值
+INTER_LINEAR  | 双线性插值（默认设置）
+INTER_AREA  | 使用像素区域关系进行重采样。
+INTER_CUBIC  | 4x4像素邻域的双三次插值
+INTER_LANCZOS4  | 8x8像素邻域的Lanczos插值
+
+#### INTER_AREA 
+>详述：https://zhuanlan.zhihu.com/p/38493205
+
+
+>Note：
+>- 至于最后的插值方法，正常情况下使用默认的双线性插值就够用了。
+>- 几种常用方法的效率是：最邻近插值>双线性插值>双立方插值>Lanczos插值；
+但是效率和效果成反比，所以根据自己的情况酌情使用。
+
+
+>Note：
+>		在计算机中，图像是以矩阵的形式保存的，**先行后列**。所以，一张 宽×高×颜色通道＝**480×256**×3 的图片会保存在一个 **256×480**×3 的三维张量中。图像处理时也是按照这种思想进行计算的（其中就包括 **OpenCV** 下的图像处理），即 **高×宽×颜色通道**。
+		但是问题来了，cv2.resize这个api却是个小例外。因为它的参数输入却是 **宽×高×颜色通道**。
+
+
+>验证代码：
+>摘自:https://blog.csdn.net/jningwei/article/details/76019940
+```python
+import cv2
+import numpy as np
+import random
+
+
+seq = [random.randint(0, 255) for _ in range(256*480*3)]
+mat = np.resize(seq, new_shape=[256, 480, 3])
+print ('mat.shape = {}'.format(mat.shape))
+cv2.imwrite('origin_pic.jpg', mat)
+origin_pic = cv2.imread('./origin_pic.jpg')
+print ('origin_pic.shape = {}'.format(origin_pic.shape))
+resize_pic = cv2.resize(src=origin_pic,
+                        dsize=(int(origin_pic.shape[1] * 2),
+                               int(origin_pic.shape[0] * 1))
+                        )
+print ('resize_pic.shape = {}'.format(resize_pic.shape))
+cv2.imshow('resize_pic', resize_pic)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+Output：
+```python
+mat.shape = (256, 480, 3)
+origin_pic.shape = (256, 480, 3)
+resize_pic.shape = (256, 960, 3)
+```
+
+## 使用方式
+>- 保留纵横比并增加或减少图像的宽度和高度。
+>- 仅沿X轴或水平轴缩放图像。
+>- 仅沿Y轴或垂直轴缩放图像。
+
+
+## 一些应用实例
+
+
+参考文章：
+https://blog.csdn.net/weixin_41466575/article/details/113058802
+https://blog.csdn.net/wzhrsh/article/details/101630396
