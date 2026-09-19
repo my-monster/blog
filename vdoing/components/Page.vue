@@ -29,7 +29,9 @@
         <slot name="bottom" v-if="isShowSlotB" />
         <PageEdit />
 
-        <PageNav v-bind="{ sidebarItems }" />
+        <ClientOnly>
+          <Giscus />
+        </ClientOnly>
       </div>
 
       <UpdateArticle
@@ -48,6 +50,7 @@ import ArticleInfo from './ArticleInfo.vue'
 import Catalogue from './Catalogue.vue'
 import UpdateArticle from './UpdateArticle.vue'
 import RightMenu from './RightMenu.vue'
+import Giscus from './Giscus.vue'
 
 import TitleBadgeMixin from '../mixins/titleBadge'
 
@@ -59,7 +62,7 @@ export default {
     }
   },
   props: ['sidebarItems'],
-  components: { PageEdit, PageNav, ArticleInfo, Catalogue, UpdateArticle, RightMenu },
+  components: { PageEdit, PageNav, ArticleInfo, Catalogue, UpdateArticle, RightMenu, Giscus },
   created() {
     this.updateBarConfig = this.$themeConfig.updateBar
   },

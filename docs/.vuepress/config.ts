@@ -7,6 +7,7 @@ import { VdoingThemeConfig } from 'vuepress-theme-vdoing/types'
 import dayjs from 'dayjs'
 import baiduCode from './config/baiduCode' // 百度统计hm码
 import htmlModules from './config/htmlModules' // 自定义插入的html块
+import giscus from './config/giscus' // Giscus 评论配置
 
 export default defineConfig4CustomTheme<VdoingThemeConfig>({
   // theme: 'vdoing', // 使用npm主题包
@@ -194,7 +195,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     footer: {
       createYear: 2022, // 博客创建年份
       copyrightInfo:
-        'Evan Xu | <a href="https://github.com/my-monster" target="_blank">MIT License</a>', // 博客版权信息，支持a标签或换行标签</br>
+        'Liu Yuan | <a href="https://github.com/my-monster" target="_blank">MIT License</a>', // 博客版权信息，支持a标签或换行标签</br>
     },
 
     // 扩展自动生成frontmatter。（当md文件的frontmatter不存在相应的字段时将自动添加。不会覆盖已有的数据。）
@@ -206,7 +207,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     },
 
     // 自定义hmtl(广告)模块
-    htmlModules
+    htmlModules,
+
+    // Giscus 评论配置
+    giscus
   },
 
   // 注入到页面<head>中的标签，格式[tagName, { attrName: attrValue }, innerHTML?]
@@ -271,7 +275,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           },
           {
             title: '通过百度搜索本站的',
-            frontUrl: 'https://www.baidu.com/s?wd=site%3Axugaoyi.com%20',
+            frontUrl: 'https://www.baidu.com/s?wd=site%3Amy-monster.github.io%20',
           },
         ],
       }
@@ -309,26 +313,26 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         },
       },
     ],
-    [
-      'vuepress-plugin-comment', // 评论
-      {
-        choosen: 'gitalk',
-        options: {
-          clientID: 'a6e1355287947096b88b',
-          clientSecret: 'f0e77d070fabfcd5af95bebb82b2d574d7248d71',
-          repo: 'blog-gitalk-comment', // GitHub 仓库
-          owner: 'liuyuan', // GitHub仓库所有者
-          admin: ['liuyuan'], // 对仓库有写权限的人
-          // distractionFreeMode: true,
-          pagerDirection: 'last', // 'first'正序 | 'last'倒序
-          id: '<%- (frontmatter.permalink || frontmatter.to.path).slice(-16) %>', //  页面的唯一标识,长度不能超过50
-          title: '「评论」<%- frontmatter.title %>', // GitHub issue 的标题
-          labels: ['Gitalk', 'Comment'], // GitHub issue 的标签
-          body:
-            '页面：<%- window.location.origin + (frontmatter.to.path || window.location.pathname) %>', // GitHub issue 的内容
-        },
-      },
-    ],
+    // 已平替升级为 Giscus（无 Secret 风险，基于 GitHub Discussions）。配置位于 .vuepress/config/giscus.ts
+    // [
+    //   'vuepress-plugin-comment', // 评论
+    //   {
+    //     choosen: 'gitalk',
+    //     options: {
+    //       clientID: 'a6e1355287947096b88b',
+    //       clientSecret: process.env.GITALK_CLIENT_SECRET || '',
+    //       repo: 'blog-gitalk-comment',
+    //       owner: 'liuyuan',
+    //       admin: ['liuyuan'],
+    //       pagerDirection: 'last',
+    //       id: '<%- (frontmatter.permalink || frontmatter.to.path).slice(-16) %>',
+    //       title: '「评论」<%- frontmatter.title %>',
+    //       labels: ['Gitalk', 'Comment'],
+    //       body:
+    //         '页面：<%- window.location.origin + (frontmatter.to.path || window.location.pathname) %>',
+    //     },
+    //   },
+    // ],
     [
       '@vuepress/last-updated', // "上次更新"时间格式
       {
